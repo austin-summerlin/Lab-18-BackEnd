@@ -28,8 +28,7 @@ async function run() {
         story_topic_dogs BOOLEAN NOT NULL,
         story_topic_accidental_poems BOOLEAN,
         story_topic_other VARCHAR(128) NOT NULL,
-
-
+        user_id INTERGER NOT NULL REFERENCES users(id)
       );
     `);
 

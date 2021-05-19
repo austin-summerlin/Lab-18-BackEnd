@@ -25,12 +25,12 @@ async function run() {
     const user = data[0].rows[0];
 
     await Promise.all(
-      squirrels.map(squirell => {
+      squirrels.map(squirrel => {
         return client.query(`
-        INSERT INTO squirrels (hectare, shift, date, story_topic_park_experience, story_topic_squirrel, story_topic_other_animals, story_topic_dogs, story_topic_accidental_poems, story_topic_other lives, user_id)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        INSERT INTO squirrels (hectare, shift, date, note_squirrel_park_stories,  story_topic_accidental_poems, story_topic_other, user_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         `,
-          [squirell.hectare, squirell.shift, squirell.date, squirell.storyTopicParkExperience, squirell.storyTopicSquirrel, squirell.storyTopicOtherAnimals, squirell.storyTopicDogs, squirell.storyTopicAccidentalPoems, squirell.storyTopicOther, user.id]);
+          [squirrel.hectare, squirrel.shift, squirrel.date, squirrel.note_squirrel_park_stories, squirrel.story_topic_accidental_poems, squirrel.story_topic_other, user.id]);
       })
     );
 

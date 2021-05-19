@@ -18,17 +18,14 @@ async function run() {
       );
     
       CREATE TABLE squirrels (
-        hectare SERIAL PRIMARY KEY NOT NULL,
-        shift VARCHAR(512) NOT NULL,
-        date VARCHAR(128) NOT NULL,
-        note_squirrel_park_stories VARCHAR(1024) NOT NULL,
-        story_topic_park_experience BOOLEAN NOT NULL,
-        story_topic_squirrel BOOLEAN NOT NULL,
-        story_topic_other_animals BOOLEAN NOT NULL,
-        story_topic_dogs BOOLEAN NOT NULL,
+        id SERIAL PRIMARY KEY NOT NULL,
+        hectare TEXT NOT NULL,
+        shift TEXT NOT NULL,
+        date TEXT NOT NULL,
+        note_squirrel_park_stories TEXT NOT NULL,
         story_topic_accidental_poems BOOLEAN,
-        story_topic_other VARCHAR(128) NOT NULL,
-        user_id INTERGER NOT NULL REFERENCES users(id)
+        story_topic_other TEXT NOT NULL,
+        user_id INTEGER NOT NULL REFERENCES users(id)
       );
     `);
 

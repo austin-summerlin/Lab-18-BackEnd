@@ -17,21 +17,25 @@ async function run() {
         hash VARCHAR(512) NOT NULL
       );
     
-      CREATE TABLE cats (
-        id SERIAL PRIMARY KEY NOT NULL,
-        name VARCHAR(512) NOT NULL,
-        type VARCHAR(128) NOT NULL,
-        url VARCHAR(1024) NOT NULL,
-        year INTEGER NOT NULL,
-        lives INTEGER NOT NULL,
-        is_sidekick BOOLEAN DEFAULT FALSE NOT NULL,
-        user_id INTEGER NOT NULL REFERENCES users(id)
+      CREATE TABLE squirrels (
+        hectare SERIAL PRIMARY KEY NOT NULL,
+        shift VARCHAR(512) NOT NULL,
+        date VARCHAR(128) NOT NULL,
+        note_squirrel_park_stories VARCHAR(1024) NOT NULL,
+        story_topic_park_experience BOOLEAN NOT NULL,
+        story_topic_squirrel BOOLEAN NOT NULL,
+        story_topic_other_animals BOOLEAN NOT NULL,
+        story_topic_dogs BOOLEAN NOT NULL,
+        story_topic_accidental_poems BOOLEAN,
+        story_topic_other VARCHAR(128) NOT NULL,
+
+
       );
     `);
 
     console.log('create tables complete');
   }
-  catch(err) {
+  catch (err) {
     // problem? let's see the error...
     console.log(err);
   }

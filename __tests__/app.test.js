@@ -2,7 +2,7 @@ import client from '../lib/client.js';
 import supertest from 'supertest';
 import app from '../lib/app.js';
 import { execSync } from 'child_process';
-import formatSquirrels from '../utils/munge-utils.js';
+
 
 const request = supertest(app);
 
@@ -12,7 +12,7 @@ describe('API Routes', () => {
     return client.end();
   });
 
-  describe('/api/cats', () => {
+  describe('favorites', () => {
     let user;
 
     beforeAll(async () => {
@@ -31,6 +31,7 @@ describe('API Routes', () => {
       user = response.body;
     });
 
+
     // append the token to your requests:
     //  .set('Authorization', user.token);
 
@@ -46,3 +47,4 @@ describe('API Routes', () => {
 
   });
 });
+

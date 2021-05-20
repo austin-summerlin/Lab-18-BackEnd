@@ -33,6 +33,18 @@ describe('API Routes', () => {
 
       user = response.body;
 
+      const otherResponse = await request
+        .post('/api/auth/signup')
+        .send({
+          name: 'the other user',
+          email: 'squirrel.watcher42069@gmail.com',
+          password: 'notpassword'
+        });
+
+      expect(otherResponse.status).toBe(200);
+
+      user2 = otherResponse.body;
+
 
     });
 
@@ -46,7 +58,7 @@ describe('API Routes', () => {
     };
 
 
-    test('GET my /api/favorites', async () => {
+    test('GET /api/favorites', async () => {
       const postResponse = await request
         .post('/api/favorites')
         .set('Authorization', user.token)
@@ -61,18 +73,18 @@ describe('API Routes', () => {
     });
 
     test('POST /api/me/favorites', async () => {
-
+      
       const response = await request
         .post('/api/favorites')
         .set('Authorization', user.token)
         .send(favorite);
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual({
-        userId: user.id, ...favorite
-      });
-
       favorite = response.body;
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(favorite);
+
+      
     });
 
     test('GET /api/me/favorites', async () => {
@@ -103,6 +115,16 @@ describe('API Routes', () => {
       expect(response2.status).toBe(200);
       expect(response2.body).toEqual([otherFavorite]);
 
+    });
+
+    test('DELETE api/favorites/:id', async () => {
+      const response = await request
+        .delete(`/api/favorites/${favorite.id}`)
+        .set('Authorization', user.token)
+        .send(favorite);
+
+      expect (response.status).toBe(200);
+      expect(response.body).toEqual(favorite);
     });
   });
 });

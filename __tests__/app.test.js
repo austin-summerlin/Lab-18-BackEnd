@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import client from '../lib/client.js';
 import supertest from 'supertest';
 import app from '../lib/app.js';
@@ -73,7 +74,7 @@ describe('API Routes', () => {
     });
 
     test('POST /api/me/favorites', async () => {
-      
+
       const response = await request
         .post('/api/favorites')
         .set('Authorization', user.token)
@@ -84,7 +85,7 @@ describe('API Routes', () => {
       expect(response.status).toBe(200);
       expect(response.body).toEqual(favorite);
 
-      
+
     });
 
     test('GET /api/me/favorites', async () => {
@@ -123,7 +124,7 @@ describe('API Routes', () => {
         .set('Authorization', user.token)
         .send(favorite);
 
-      expect (response.status).toBe(200);
+      expect(response.status).toBe(200);
       expect(response.body).toEqual(favorite);
     });
   });

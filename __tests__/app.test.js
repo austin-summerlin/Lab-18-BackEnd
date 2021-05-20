@@ -42,23 +42,25 @@ describe('API Routes', () => {
       'date': '10062018',
       'stories': 'Busy area, with heavy car traffic and lots of dog and human traffic and a high level of birds (making tree spotting difficult).',
       'experience': true,
-      'animals': true,
-      'other': 'Birds',
-      'poems': true
+      'poems': true,
     };
 
-    test('GET my /api/squirrel-sightings', async () => {
 
+    test('GET my /api/favorites', async () => {
+      const postResponse = await request
+        .post('/api/favorites')
+        .set('Authorization', user.token)
+        .send(favorite);
       const response = await request
-        .get('/api/squirrel-sightings')
+        .get('/api/me/favorites')
         .set('Authorization', user.token);
       console.log(response.body);
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(expect.arrayContaining(favorite));
+      expect(response.body).toEqual([{ ...postResponse.body, id: 1 }]);
 
     });
 
-    test.skip('POST /api/me/favorites', async () => {
+    test('POST /api/me/favorites', async () => {
 
       const response = await request
         .post('/api/favorites')
@@ -73,7 +75,7 @@ describe('API Routes', () => {
       favorite = response.body;
     });
 
-    test.skip('GET /api/me/favorites', async () => {
+    test('GET /api/me/favorites', async () => {
       const otherResponse = await request
         .post('/api/favorites')
         .set('Authorization', user2.token)
@@ -83,8 +85,6 @@ describe('API Routes', () => {
           'date': '10062018',
           'stories': 'Busy area, with heavy car traffic and lots of dog and human traffic and a high level of birds (making tree spotting difficult).',
           'experience': true,
-          'animals': true,
-          'other': 'Birds',
           'poems': true,
         });
 

@@ -27,10 +27,10 @@ async function run() {
     await Promise.all(
       squirrels.map(squirrel => {
         return client.query(`
-        INSERT INTO squirrels (hectare, shift, date, note_squirrel_park_stories,  story_topic_accidental_poems, story_topic_other, user_id)
+        INSERT INTO favorites (hectare, shift, date, stories, experience, poems, user_id)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         `,
-          [squirrel.hectare, squirrel.shift, squirrel.date, squirrel.note_squirrel_park_stories, squirrel.story_topic_accidental_poems, squirrel.story_topic_other, user.id]);
+          [squirrel.hectare, squirrel.shift, squirrel.date, squirrel.stories, squirrel.experience, squirrel.poems, user.id]);
       })
     );
 

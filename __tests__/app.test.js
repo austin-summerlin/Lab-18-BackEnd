@@ -2,6 +2,7 @@ import client from '../lib/client.js';
 import supertest from 'supertest';
 import app from '../lib/app.js';
 import { execSync } from 'child_process';
+import formatSquirrels from '../utils/munge-utils.js';
 
 const request = supertest(app);
 
@@ -32,15 +33,15 @@ describe('API Routes', () => {
 
     // append the token to your requests:
     //  .set('Authorization', user.token);
-    
+
     it('VERB to /api/route [with context]', async () => {
-      
+
       // remove this line, here to not have lint error:
       user.token;
-    
+
       // expect(response.status).toBe(200);
       // expect(response.body).toEqual(?);
-      
+
     });
 
   });

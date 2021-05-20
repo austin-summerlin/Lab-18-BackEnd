@@ -36,33 +36,44 @@ describe('API Routes', () => {
 
     });
 
+    let favorite = {
+      'hectare': '02I',
+      'shift': 'AM',
+      'date': '10062018',
+      'stories': 'Busy area, with heavy car traffic and lots of dog and human traffic and a high level of birds (making tree spotting difficult).',
+      'experience': true,
+      'animals': true,
+      'other': 'Birds',
+      'poems': true
+    };
+
     test('GET my /api/squirrel-sightings', async () => {
 
-      const getSquirrelResponse = await request
-        .post('/api/squirrel-sightings')
-        .set('Authorization', user.token)
-        .send({
-          'hectare': '02I',
-          'shift': 'AM',
-          'date': '10062018',
-          'stories': 'Busy area, with heavy car traffic and lots of dog and human traffic and a high level of birds (making tree spotting difficult).',
-          'experience': true,
-          'animals': true,
-          'other': 'Birds',
-          'poems': true,
-        });
-
-      expect(getSquirrelResponse.status).toBe(200);
-      const story = getSquirrelResponse.body;
-      console.log(story);
-      const response = await request.get('/api/squirrel-sightings')
+      const response = await request
+        .get('/api/squirrel-sightings')
         .set('Authorization', user.token);
-
+      console.log(response.body);
       expect(response.status).toBe(200);
-      expect(response.body).toBe([story]);
+      expect(response.body).toEqual(expect.arrayContaining(favorite));
+
     });
 
-    test('GET /api/me/favorites', async () => {
+    test.skip('POST /api/me/favorites', async () => {
+
+      const response = await request
+        .post('/api/favorites')
+        .set('Authorization', user.token)
+        .send(favorite);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        userId: user.id, ...favorite
+      });
+
+      favorite = response.body;
+    });
+
+    test.skip('GET /api/me/favorites', async () => {
       const otherResponse = await request
         .post('/api/favorites')
         .set('Authorization', user2.token)
@@ -83,7 +94,7 @@ describe('API Routes', () => {
       const response = await request.get('/api/me/favorites')
         .set('Authorization', user.token);
 
-      expect(response.status).toBe(200); 
+      expect(response.status).toBe(200);
       expect(response.body).toEqual(expect.not.arrayContaining([otherFavorite]));
 
       const response2 = await request.get('/api/me/favorites')
@@ -91,13 +102,7 @@ describe('API Routes', () => {
 
       expect(response2.status).toBe(200);
       expect(response2.body).toEqual([otherFavorite]);
-        
+
     });
-
-    test('POST /api/me/favorites' async () => {
-      
-    })
-
   });
 });
-

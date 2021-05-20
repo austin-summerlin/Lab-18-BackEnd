@@ -15,6 +15,7 @@ describe('API Routes', () => {
 
   describe('favorites', () => {
     let user;
+    let user2;
 
     beforeAll(async () => {
       execSync('npm run recreate-tables');
@@ -60,6 +61,42 @@ describe('API Routes', () => {
       expect(response.status).toBe(200);
       expect(response.body).toBe([story]);
     });
+
+    test('GET /api/me/favorites', async () => {
+      const otherResponse = await request
+        .post('/api/favorites')
+        .set('Authorization', user2.token)
+        .send({
+          'hectare': '02I',
+          'shift': 'AM',
+          'date': '10062018',
+          'stories': 'Busy area, with heavy car traffic and lots of dog and human traffic and a high level of birds (making tree spotting difficult).',
+          'experience': true,
+          'animals': true,
+          'other': 'Birds',
+          'poems': true,
+        });
+
+      expect(otherResponse.status).toBe(200);
+      const otherFavorite = otherResponse.body;
+
+      const response = await request.get('/api/me/favorites')
+        .set('Authorization', user.token);
+
+      expect(response.status).toBe(200); 
+      expect(response.body).toEqual(expect.not.arrayContaining([otherFavorite]));
+
+      const response2 = await request.get('/api/me/favorites')
+        .set('Authorization', user2.token);
+
+      expect(response2.status).toBe(200);
+      expect(response2.body).toEqual([otherFavorite]);
+        
+    });
+
+    test('POST /api/me/favorites' async () => {
+      
+    })
 
   });
 });

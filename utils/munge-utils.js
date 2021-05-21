@@ -1,14 +1,14 @@
-export function formatSquirrels(squirrels) {
-  return squirrels.data.map(squirrel => {
-    return {
+export function formatSquirrels(data) {
+  const arr = data.map(squirrel => {
+    return [{
       hectare: squirrel.hectare,
       shift: squirrel.shift,
-      stories: squirrel.note_squirrel_park_stories,
       date: squirrel.date,
+      stories: squirrel.note_squirrel_park_stories,
       experience: squirrel.story_topic_park_experience,
-      animals: squirrel.story_topic_other_animals,
-      poems: squirrel.story_topic_accidental_poems,
-      other: squirrel.story_topic_other
-    };
+      poems: squirrel.story_topic_accidental_poems
+    }];
   });
+  return arr[0];
 }
+

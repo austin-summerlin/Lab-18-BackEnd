@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
 import client from '../lib/client.js';
 import supertest from 'supertest';
 import app from '../lib/app.js';
 import { execSync } from 'child_process';
-import formatSquirrels from '../utils/munge-utils.js';
+// import { formatSquirrels } from '../utils/munge-utils.js';
+
 
 const request = supertest(app);
 
@@ -12,11 +14,13 @@ describe('API Routes', () => {
     return client.end();
   });
 
-  describe('/api/cats', () => {
+  describe('favorites', () => {
     let user;
+    let user2;
 
     beforeAll(async () => {
       execSync('npm run recreate-tables');
+
 
       const response = await request
         .post('/api/auth/signup')
@@ -29,20 +33,99 @@ describe('API Routes', () => {
       expect(response.status).toBe(200);
 
       user = response.body;
+
+      const otherResponse = await request
+        .post('/api/auth/signup')
+        .send({
+          name: 'the other user',
+          email: 'squirrel.watcher42069@gmail.com',
+          password: 'notpassword'
+        });
+
+      expect(otherResponse.status).toBe(200);
+
+      user2 = otherResponse.body;
+
+
     });
 
-    // append the token to your requests:
-    //  .set('Authorization', user.token);
+    let favorite = {
+      'hectare': '02I',
+      'shift': 'AM',
+      'date': '10062018',
+      'stories': 'Busy area, with heavy car traffic and lots of dog and human traffic and a high level of birds (making tree spotting difficult).',
+      'experience': true,
+      'poems': true,
+    };
 
-    it('VERB to /api/route [with context]', async () => {
 
-      // remove this line, here to not have lint error:
-      user.token;
-
-      // expect(response.status).toBe(200);
-      // expect(response.body).toEqual(?);
+    test('GET /api/favorites', async () => {
+      const postResponse = await request
+        .post('/api/favorites')
+        .set('Authorization', user.token)
+        .send(favorite);
+      const response = await request
+        .get('/api/me/favorites')
+        .set('Authorization', user.token);
+      console.log(response.body);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual([{ ...postResponse.body, id: 1 }]);
 
     });
 
+    test('POST /api/me/favorites', async () => {
+
+      const response = await request
+        .post('/api/favorites')
+        .set('Authorization', user.token)
+        .send(favorite);
+
+      favorite = response.body;
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(favorite);
+
+
+    });
+
+    test('GET /api/me/favorites', async () => {
+      const otherResponse = await request
+        .post('/api/favorites')
+        .set('Authorization', user2.token)
+        .send({
+          'hectare': '02I',
+          'shift': 'AM',
+          'date': '10062018',
+          'stories': 'Busy area, with heavy car traffic and lots of dog and human traffic and a high level of birds (making tree spotting difficult).',
+          'experience': true,
+          'poems': true,
+        });
+
+      expect(otherResponse.status).toBe(200);
+      const otherFavorite = otherResponse.body;
+
+      const response = await request.get('/api/me/favorites')
+        .set('Authorization', user.token);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(expect.not.arrayContaining([otherFavorite]));
+
+      const response2 = await request.get('/api/me/favorites')
+        .set('Authorization', user2.token);
+
+      expect(response2.status).toBe(200);
+      expect(response2.body).toEqual([otherFavorite]);
+
+    });
+
+    test('DELETE api/favorites/:id', async () => {
+      const response = await request
+        .delete(`/api/favorites/${favorite.id}`)
+        .set('Authorization', user.token)
+        .send(favorite);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(favorite);
+    });
   });
 });

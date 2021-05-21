@@ -17,14 +17,14 @@ async function run() {
         hash VARCHAR(512) NOT NULL
       );
     
-      CREATE TABLE squirrels (
+      CREATE TABLE favorites(
         id SERIAL PRIMARY KEY NOT NULL,
         hectare TEXT NOT NULL,
         shift TEXT NOT NULL,
         date TEXT NOT NULL,
-        note_squirrel_park_stories TEXT NOT NULL,
-        story_topic_accidental_poems BOOLEAN,
-        story_topic_other TEXT NOT NULL,
+        stories TEXT NOT NULL,
+        experience BOOLEAN,
+        poems BOOLEAN,
         user_id INTEGER NOT NULL REFERENCES users(id)
       );
     `);
